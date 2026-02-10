@@ -1,5 +1,139 @@
-<script>
-        // DATA DASAR (LOCKED PRICE & GRAMASI TETAP)
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Integrasi Gizi (SIG) - Internal Audit Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-900">
+
+    <header class="bg-slate-900 text-white p-4 shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">SIG INTEGRASI - INTERNAL CONTROL</h1>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest">Fokus: Koperasi | SPPG | Owner Monitoring</p>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <span class="bg-blue-500/20 text-blue-400 border border-blue-500 px-3 py-1 rounded-full text-[10px] font-mono">CORE SYSTEM ACTIVE</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-2 mb-4 text-orange-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <h2 class="font-bold uppercase tracking-wider text-sm">Modul Koperasi (Stok)</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                    <p class="text-[10px] text-orange-700 font-bold mb-3 uppercase tracking-tighter text-center">e-Catalog Stok Real-Time</p>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-white p-2 rounded-lg shadow-sm">
+                            <p class="text-[9px] text-slate-400 uppercase">Beras</p>
+                            <p id="stok-Beras" class="font-bold text-slate-700 text-sm">500</p>
+                            <p class="text-[8px] text-slate-400">kg</p>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm">
+                            <p class="text-[9px] text-slate-400 uppercase">Ayam</p>
+                            <p id="stok-Ayam" class="font-bold text-slate-700 text-sm">100</p>
+                            <p class="text-[8px] text-slate-400">kg</p>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg shadow-sm">
+                            <p class="text-[9px] text-slate-400 uppercase">Telur</p>
+                            <p id="stok-Telur" class="font-bold text-slate-700 text-sm">200</p>
+                            <p class="text-[8px] text-slate-400">btr</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 block mb-1 uppercase">Pilih Bahan Baku</label>
+                        <select id="item-select" class="w-full border-2 border-slate-100 p-2 rounded-lg bg-slate-50 text-sm focus:border-orange-400 outline-none">
+                            <option value="Beras">Beras (Rp 13.000/kg)</option>
+                            <option value="Ayam">Daging Ayam (Rp 35.000/kg)</option>
+                            <option value="Telur">Telur Ayam (Rp 28.000/btr)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 block mb-1 uppercase">Jumlah Penerima (MBG)</label>
+                        <input type="number" id="jml-penerima" placeholder="Input jml anak..." class="w-full border-2 border-slate-100 p-2 rounded-lg text-sm focus:border-orange-400 outline-none">
+                    </div>
+                    <button onclick="buatPOOtomatis()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl shadow-md transition-all text-xs uppercase tracking-widest">Generate PO Otomatis</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="lg:col-span-2 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2 text-blue-600 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h2 class="uppercase tracking-wider text-sm">Verifikasi Kedatangan (Blind Receiving)</h2>
+                </div>
+                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100 font-bold">IoT SCALE CONNECTED</span>
+            </div>
+
+            <div class="overflow-x-auto min-h-[200px]">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="text-slate-400 border-b uppercase">
+                            <th class="pb-3 px-2 font-bold">Item</th>
+                            <th class="pb-3 px-2 font-bold">Input Riil (IoT)</th>
+                            <th class="pb-3 px-2 font-bold">Double Verification</th>
+                            <th class="pb-3 px-2 font-bold text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-verifikasi" class="divide-y divide-slate-50">
+                        <tr><td colspan="4" class="py-20 text-center text-slate-300 italic uppercase tracking-widest text-[10px]">Menunggu PO dari SPPG...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="lg:col-span-3 bg-slate-900 text-slate-300 p-6 rounded-3xl shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-white font-bold text-lg flex items-center gap-2">
+                        <span class="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                        Executive Owner Dashboard
+                    </h2>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest">Internal Control & Fraud Detection</p>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 min-w-[200px]">
+                    <p class="text-[9px] uppercase font-bold text-slate-500 mb-1">Food Cost Terverifikasi</p>
+                    <p id="total-cost" class="text-2xl font-mono text-green-400 font-bold tracking-tighter">Rp 0</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
+                    <p class="text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-widest border-b border-slate-700 pb-2">Digital Audit Trail</p>
+                    <div id="log-audit" class="space-y-3 h-72 overflow-y-auto pr-2 custom-scrollbar">
+                        </div>
+                </div>
+
+                <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
+                    <p class="text-[10px] font-bold text-red-500 mb-4 uppercase tracking-widest border-b border-slate-700 pb-2">Anomaly Alerts (Red Flags)</p>
+                    <div id="anomaly-alerts" class="space-y-3">
+                        <div class="text-[10px] text-slate-600 italic">Mencari anomali data...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // MASTER DATA: HARGA & GRAMASI TERKUNCI (LOCKED PRICE)
         const MASTER_DATA = {
             Beras: { harga: 13000, gramasi: 150, stok: 500 }, 
             Ayam: { harga: 35000, gramasi: 100, stok: 100 },  
@@ -9,26 +143,22 @@
         let pendingOrders = [];
         let totalCost = 0;
 
-        // 1. AUTOMATIC PO GENERATOR (FIXED)
+        // 1. AUTOMATIC PO GENERATOR
         function buatPOOtomatis() {
-            const itemElement = document.getElementById('item-select');
-            const jmlPenerimaElement = document.getElementById('jml-penerima');
-            
-            const item = itemElement.value;
-            const jmlPenerima = parseInt(jmlPenerimaElement.value);
+            const item = document.getElementById('item-select').value;
+            const inputPenerima = document.getElementById('jml-penerima');
+            const jmlPenerima = parseInt(inputPenerima.value);
 
-            // Validasi Input
             if (isNaN(jmlPenerima) || jmlPenerima <= 0) {
-                Swal.fire('Input Error', 'Silakan masukkan jumlah penerima manfaat yang valid!', 'error');
+                Swal.fire('Error', 'Masukkan jumlah penerima manfaat!', 'error');
                 return;
             }
 
-            // Hitung otomatis berdasarkan gramasi standar
+            // Hitung target berat otomatis (Sesuai Framework)
             const targetQty = (jmlPenerima * MASTER_DATA[item].gramasi) / 1000; 
             
-            // Cek Stok Koperasi
             if (targetQty > MASTER_DATA[item].stok) {
-                Swal.fire('Stok Kurang', `Stok ${item} tidak cukup untuk kebutuhan ${targetQty.toFixed(1)}kg.`, 'warning');
+                Swal.fire('Gagal', `Stok ${item} di Koperasi tidak mencukupi.`, 'warning');
                 return;
             }
 
@@ -45,95 +175,92 @@
             
             updateStokVisual();
             renderVerifikasi();
+            tambahLog('SPPG SYSTEM', `PO OTOMATIS: ${targetQty.toFixed(1)}kg ${item} untuk ${jmlPenerima} porsi.`, '-', 'GENERATED');
             
-            tambahLog('SPPG SYSTEM', `PO GENERATED: ${targetQty.toFixed(1)}kg ${item} untuk ${jmlPenerima} anak.`, '-', 'Generated');
-            
-            // Bersihkan input
-            jmlPenerimaElement.value = '';
-            Swal.fire('PO Berhasil', `Pesanan ${targetQty.toFixed(1)}kg ${item} telah diteruskan ke Koperasi.`, 'success');
+            inputPenerima.value = '';
+            Swal.fire('PO Generated', `Pesanan ${targetQty.toFixed(1)}kg telah diteruskan.`, 'success');
         }
 
-        // 2. BLIND RECEIVING & DOUBLE VERIFICATION
+        // 2. VERIFIKASI QC (BLIND RECEIVING)
         function renderVerifikasi() {
             const container = document.getElementById('list-verifikasi');
             if (pendingOrders.length === 0) {
-                container.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-300 italic text-xs">Menunggu PO dari SPPG...</td></tr>';
+                container.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-slate-300 italic uppercase tracking-widest text-[10px]">Menunggu PO dari SPPG...</td></tr>';
                 return;
             }
 
             container.innerHTML = pendingOrders.map(order => `
-                <tr class="group hover:bg-slate-50 transition-all border-b border-slate-100">
-                    <td class="py-4 font-bold text-slate-700 uppercase text-xs">${order.item}</td>
-                    <td class="py-4">
+                <tr class="hover:bg-slate-50 transition-all border-b border-slate-100">
+                    <td class="py-4 px-2 font-bold text-slate-700 uppercase">${order.item}</td>
+                    <td class="py-4 px-2">
                         <div class="flex items-center gap-2">
-                            <input type="number" id="input-weight-${order.id}" placeholder="KG Riil" class="w-20 border-2 border-slate-200 p-1 rounded-md text-xs focus:border-blue-400 outline-none">
-                            <span class="text-[9px] text-blue-500 font-bold leading-none">IoT<br>SCALE</span>
+                            <input type="number" id="input-weight-${order.id}" placeholder="KG Riil" class="w-20 border-2 border-slate-200 p-1.5 rounded-lg text-xs outline-none focus:border-blue-500">
+                            <span class="text-[8px] font-bold text-blue-400 leading-none uppercase">Sensor<br>IoT</span>
                         </div>
                     </td>
-                    <td class="py-4 text-center">
-                        <div class="flex flex-col gap-1">
-                            <input type="file" class="text-[9px] text-slate-400 w-32">
-                            <label class="inline-flex items-center text-[9px] text-slate-500 italic">
-                                <input type="checkbox" id="sign-${order.id}" class="mr-1"> Double Sign OK
-                            </label>
-                        </div>
+                    <td class="py-4 px-2">
+                        <label class="flex items-center text-[10px] font-bold text-slate-400 gap-2 cursor-pointer">
+                            <input type="checkbox" id="sign-${order.id}" class="rounded shadow-sm">
+                            DOUBLE SIGN OK
+                        </label>
                     </td>
-                    <td class="py-4 space-x-1 flex justify-end">
-                        <button onclick="verifikasiPenerimaan(${order.id})" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase hover:bg-blue-700 shadow-sm">Verifikasi</button>
-                        <button onclick="returnBarang(${order.id})" class="bg-red-50 text-red-600 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase hover:bg-red-600 hover:text-white transition-all">Return</button>
+                    <td class="py-4 px-2 text-right space-x-1">
+                        <button onclick="verifikasiPenerimaan(${order.id})" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-[9px] font-bold uppercase shadow-sm">Verifikasi</button>
+                        <button onclick="returnBarang(${order.id})" class="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-[9px] font-bold uppercase hover:bg-red-600 hover:text-white transition-all">Return</button>
                     </td>
                 </tr>
             `).join('');
         }
 
         function verifikasiPenerimaan(id) {
-            const doubleSign = document.getElementById(`sign-${id}`).checked;
-            if (!doubleSign) {
-                Swal.fire('SOP Alert', 'Wajib checklist Double Signature (Petugas & QC)!', 'warning');
+            // SOP: Double Verification
+            const signed = document.getElementById(`sign-${id}`).checked;
+            if (!signed) {
+                Swal.fire('SOP Alert', 'Wajib Checklist Double Verification oleh Petugas & QC!', 'warning');
                 return;
             }
 
             const order = pendingOrders.find(o => o.id === id);
-            const weightInput = document.getElementById(`input-weight-${id}`);
-            const actualQty = parseFloat(weightInput.value);
+            const inputWeight = document.getElementById(`input-weight-${id}`);
+            const actualQty = parseFloat(inputWeight.value);
 
             if (isNaN(actualQty) || actualQty <= 0) {
-                Swal.fire('Audit Alert', 'Input berat riil dari timbangan IoT!', 'warning');
+                Swal.fire('Audit Error', 'Wajib input berat riil dari timbangan IoT!', 'error');
                 return;
             }
 
-            // BLIND RECEIVING LOGIC: Cek selisih > 2%
+            // BLIND RECEIVING: Cek selisih > 2%
             const diff = Math.abs(actualQty - order.targetQty) / order.targetQty;
             const finalPrice = actualQty * order.hargaSatuan;
 
             if (diff > 0.02) {
-                kirimAlertAnomaly(`SELISIH TIMBANGAN: ${order.item} selisih ${(diff * 100).toFixed(1)}% dari target ${order.targetQty.toFixed(1)}kg.`);
-                tambahLog('SECURITY', `ANOMALI: Selisih berat ${order.item} (${(diff * 100).toFixed(1)}%)`, '-', 'RED FLAG');
+                kirimAlertAnomaly(`Varian Berat: ${order.item} selisih ${(diff * 100).toFixed(1)}%. Target: ${order.targetQty.toFixed(1)}kg, Riil: ${actualQty}kg.`);
+                tambahLog('SECURITY AUDIT', `RED FLAG: Selisih Berat ${order.item} > 2%`, '-', 'ANOMALY');
             }
 
             totalCost += finalPrice;
             document.getElementById('total-cost').innerText = `Rp ${totalCost.toLocaleString('id-ID')}`;
             
-            tambahLog('QC & GUDANG', `Verified: ${actualQty}kg ${order.item} diterima.`, `Rp ${finalPrice.toLocaleString()}`, 'Verified');
+            tambahLog('QC SPPG', `VERIFIED: ${actualQty}kg ${order.item} Diterima.`, `Rp ${finalPrice.toLocaleString()}`, 'VERIFIED');
             
             pendingOrders = pendingOrders.filter(o => o.id !== id);
             renderVerifikasi();
-            Swal.fire('Berhasil', 'Penerimaan terverifikasi dan masuk Audit Trail.', 'success');
+            Swal.fire('Verifikasi Berhasil', 'Data biaya telah masuk ke sistem keuangan Owner.', 'success');
         }
 
         function returnBarang(id) {
             const order = pendingOrders.find(o => o.id === id);
-            MASTER_DATA[order.item].stok += order.targetQty; 
+            MASTER_DATA[order.item].stok += order.targetQty; // Reversal Stok
             
             updateStokVisual();
-            tambahLog('SPPG QC', `RETURN: ${order.item} dikembalikan. Tagihan dibatalkan.`, 'Rp 0', 'RETURNED');
+            tambahLog('SPPG QC', `RETURN: ${order.item} Ditolak/Dikembalikan. Tagihan Batal.`, 'Rp 0', 'RETURNED');
             
             pendingOrders = pendingOrders.filter(o => o.id !== id);
             renderVerifikasi();
-            Swal.fire('Return Berhasil', 'Data stok dikembalikan ke Koperasi.', 'error');
+            Swal.fire('Barang Direturn', 'Pemesanan dibatalkan dan stok koperasi dipulihkan.', 'info');
         }
 
-        // 3. UTILS
+        // 3. INTERNAL MONITORING LOGIC
         function updateStokVisual() {
             for (let key in MASTER_DATA) {
                 const el = document.getElementById(`stok-${key}`);
@@ -144,18 +271,18 @@
         function tambahLog(pihak, aktivitas, biaya, status) {
             const logTable = document.getElementById('log-audit');
             const div = document.createElement('div');
-            const isRedFlag = status === 'RED FLAG';
+            const isAnomaly = status === 'ANOMALY';
             
-            div.className = `flex justify-between items-start p-3 bg-slate-800 rounded-xl border-l-4 ${isRedFlag ? 'border-red-500 animate-pulse' : 'border-blue-500'}`;
+            div.className = `flex justify-between items-start p-3 bg-slate-800 rounded-xl border-l-4 ${isAnomaly ? 'border-red-500 animate-pulse' : 'border-blue-500'} shadow-inner`;
             
             div.innerHTML = `
                 <div>
-                    <p class="text-[9px] text-slate-500 font-mono">${new Date().toLocaleTimeString()} - ${pihak}</p>
-                    <p class="text-xs ${isRedFlag ? 'text-red-400 font-bold' : 'text-slate-200'}">${aktivitas}</p>
+                    <p class="text-[8px] text-slate-500 font-mono uppercase tracking-tighter">${new Date().toLocaleTimeString()} - ${pihak}</p>
+                    <p class="text-[11px] ${isAnomaly ? 'text-red-400 font-bold' : 'text-slate-200'} tracking-tight">${aktivitas}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs font-bold text-green-400">${biaya}</p>
-                    <p class="text-[9px] font-bold uppercase ${isRedFlag ? 'text-red-500' : 'text-slate-500'}">${status}</p>
+                    <p class="text-[11px] font-bold text-green-400 font-mono">${biaya}</p>
+                    <p class="text-[8px] font-black uppercase ${isAnomaly ? 'text-red-500' : 'text-slate-500'}">${status}</p>
                 </div>
             `;
             logTable.prepend(div);
@@ -163,18 +290,13 @@
 
         function kirimAlertAnomaly(msg) {
             const container = document.getElementById('anomaly-alerts');
-            if (container.innerText.includes('No anomalies')) container.innerHTML = '';
+            if (container.innerText.includes('Mencari anomali')) container.innerHTML = '';
             
             const div = document.createElement('div');
-            div.className = "p-3 bg-red-900/40 border border-red-500 rounded-xl text-red-100 text-[10px] shadow-lg mb-2";
-            div.innerHTML = `<strong>🚨 ANOMALI SISTEM:</strong> ${msg}`;
+            div.className = "p-3 bg-red-950/40 border border-red-500/50 rounded-xl text-red-100 text-[10px] shadow-lg leading-tight";
+            div.innerHTML = `<span class="font-bold text-red-500">⚠️ AUDIT ALERT:</span> ${msg}`;
             container.prepend(div);
         }
-
-        function kirimFeedback(status) {
-            const teks = document.getElementById('feedback-text').value;
-            tambahLog('PENERIMA', `FEEDBACK: ${teks || 'Konfirmasi Terima Makanan'}`, '-', 'Rating: ★★★★★');
-            Swal.fire('Terkirim', 'Ulasan gizi masuk ke dashboard pengawasan.', 'info');
-            document.getElementById('feedback-text').value = '';
-        }
     </script>
+</body>
+</html>
