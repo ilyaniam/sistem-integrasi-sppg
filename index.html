@@ -296,4 +296,11 @@
             document.getElementById('feedback-text').value = '';
         }
 
-        function updateStokVisual
+        function updateStokVisual() {
+            for (let key in MASTER_DATA) {
+                document.getElementById(`stok-${key}`).innerText = MASTER_DATA[key].stok.toFixed(1);
+            }
+        }
+    </script>
+</body>
+</html>
